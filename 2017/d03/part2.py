@@ -1,41 +1,45 @@
+from math import sqrt, fabs
+from decimal import Decimal, ROUND_HALF_UP
+
 _input = 368078
 
-NORTH, S, W, E = (0, -1), (0, 1), (-1, 0), (1, 0)  # directions
-turn_right = {NORTH: E, E: S, S: W, W: NORTH}  # old -> new direction
+N, S, W, E = (1, 0), (-1, 0), (0, -1), (0, 1)
+turn_left = {N: W, W: S, S: E, E: N}
 around = (0, -1), (0, 1), (-1, 0), (1, 0), (-1, -1), (1, 1), (-1, 1), (1, -1)
 
 
-def values_around(matrix, y, x):
+def values_around(array, x, y):
     result = 0
     for pos in around:
-        if matrix[y + pos[0]][x + pos[1]] is not None:
-            result += matrix[y + pos[0]][x + pos[1]]
+        if array[x + pos[0]][y + pos[1]] is not None:
+            result += array[x + pos[0]][y + pos[1]]
     return result
 
 
-def spiral(width, height):
-    x, y = width // 2, height // 2
-    dx, dy = W
-    matrix = [[None] * (width + 1) for _ in range(height + 1)]
-    count = 0
+def prepare_spiral(_input):
+    value = int(Decimal(sqrt(_input)).quantize(0, ROUND_HALF_UP))
+    x, y = value // 2, value // 2
+    array = [[None] * (value + 2) for _ in range(value + 1)]
+    array[x][y] = 1
+    dx, dy = E
+
     while True:
-        count += 1
-        if count == 1:
-            matrix[y][x] = count
-        else:
-            result = values_around(matrix, y, x)
-            matrix[y][x] = result
-            if result > _input:
-                return result
-        new_dx, new_dy = turn_right[dx, dy]
-        new_x, new_y = x + new_dx, y + new_dy
-        if (0 <= new_x < width and 0 <= new_y < height and
-                matrix[new_y][new_x] is None):
+        tmp_x, tmp_y = turn_left[dx, dy]
+        new_x, new_y = x + tmp_x, y + tmp_y
+
+        if array[new_x][new_y] is None:
             x, y = new_x, new_y
-            dx, dy = new_dx, new_dy
+            dx, dy = tmp_x, tmp_y
         else:
             x, y = x + dx, y + dy
 
+        result = values_around(array, x, y)
+        if result > _input:
+            return result
+        array[x][y] = result
 
-print(spiral(100, 100))
+
+spiral = prepare_spiral(_input)
+print(spiral)
+
 

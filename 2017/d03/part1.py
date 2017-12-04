@@ -1,34 +1,35 @@
+from math import sqrt, fabs
+from decimal import Decimal, ROUND_HALF_UP
+
 _input = 368078
 
-NORTH, S, W, E = (0, -1), (0, 1), (-1, 0), (1, 0)
-turn_right = {NORTH: E, E: S, S: W, W: NORTH}
+N, S, W, E = (1, 0), (-1, 0), (0, -1), (0, 1)
+turn_left = {N: W, W: S, S: E, E: N}
 
 
-def spiral(width, height):
-    x, y = width // 2, height // 2
-    dx, dy = NORTH
-    matrix = [[None] * width for _ in range(height)]
-    count = 0
+def prepare_spiral(_input):
+    value = int(Decimal(sqrt(_input)).quantize(0, ROUND_HALF_UP))
+    x, y = value // 2, value // 2
+    init_x, init_y = x, y
+    array = [[None] * (value + 1) for _ in range(value + 1)]
+    count = 1
+    array[x][y] = count
+    dx, dy = E
+
     while True:
         count += 1
-        matrix[y][x] = count
-        new_dx, new_dy = turn_right[dx, dy]
-        new_x, new_y = x + new_dx, y + new_dy
-        if (0 <= new_x < width and 0 <= new_y < height and
-                matrix[new_y][new_x] is None):
+        tmp_x, tmp_y = turn_left[dx, dy]
+        new_x, new_y = x + tmp_x, y + tmp_y
+        if array[new_x][new_y] is None:
             x, y = new_x, new_y
-            dx, dy = new_dx, new_dy
-        else:  # try to move straight
+            dx, dy = tmp_x, tmp_y
+        else:
             x, y = x + dx, y + dy
-            if not (0 <= x < width and 0 <= y < height):
-                return matrix
+        array[x][y] = count
+
+        if count == _input:
+            return int((fabs(init_x - x)) + (fabs(init_y - y)))
 
 
-array = spiral(607, 607)
-
-for x in range(607):
-    for y in range(607):
-        if array[y][x] == _input:
-            print((303 - x) + (303 - y))
-
-
+spiral = prepare_spiral(_input)
+print(spiral)
