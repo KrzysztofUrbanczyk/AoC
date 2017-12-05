@@ -1,6 +1,15 @@
 with open('input') as f:
     _input = f.read().splitlines()
 
+#part 1
+result = 0
+for line in _input:
+    numbers = list(map(int, line.split('\t')))
+    result += int(max(numbers)) - int(min(numbers))
+
+print(result)
+
+#part 2
 result = 0
 for line in _input:
     numbers = list(map(int, line.split('\t')))
@@ -10,3 +19,5 @@ for line in _input:
                 result += dividend / divisor
 
 print(result)
+
+

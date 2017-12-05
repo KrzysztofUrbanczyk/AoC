@@ -1,13 +1,24 @@
 from itertools import combinations
 from collections import Counter
 
+with open('input') as f:
+    _input = f.read().splitlines()
 
+#part 1
+result = 0
+
+for line in _input:
+    words = line.split(" ")
+    if len(set(words)) == len(words):
+        result += 1
+
+print(result)
+
+
+#part 2
 def is_anagram(str1, str2):
     return Counter(str1) == Counter(str2)
 
-
-with open('input') as f:
-    _input = f.read().splitlines()
 
 result = 0
 
