@@ -1,45 +1,47 @@
 with open('input') as f:
     _input = f.read()
 
-bracer_count = 0
-garbage_open = False
+bracer_counter = 0
+is_garbage_open = False
 
-result = 0
-x = 0
+groups_score = 0
+index = 0
 
-grb = 0
+garbage = 0
 
 
 while True:
-    if _input[x] == '!':
-        x += 2
+    if _input[index] == '!':
+        index += 2
         continue
 
-    if _input[x] == '<':
-        if not garbage_open:
-            grb -= 1
-        garbage_open = True
+    if _input[index] == '<':
+        if not is_garbage_open:
+            garbage -= 1
+        is_garbage_open = True
 
-    if garbage_open and _input[x] != '>':
-        x += 1
-        grb += 1
+    if is_garbage_open and _input[index] != '>':
+        index += 1
+        garbage += 1
         continue
 
-    if _input[x] == '>':
-        garbage_open = False
+    if _input[index] == '>':
+        is_garbage_open = False
 
-    if _input[x] == '{':
-        bracer_count += 1
-        result += bracer_count
+    if _input[index] == '{':
+        bracer_counter += 1
+        groups_score += bracer_counter
 
-    if _input[x] == '}':
-        bracer_count -= 1
+    if _input[index] == '}':
+        bracer_counter -= 1
 
-    if len(_input) - 1 == x:
+    if len(_input) - 1 == index:
         break
     else:
-        x += 1
+        index += 1
 
+#part 1
+print(groups_score)
 
-print(result)
-print(grb)
+#part 2
+print(garbage)

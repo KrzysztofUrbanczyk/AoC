@@ -1,4 +1,5 @@
-_input = open("input", "r").read()
+with open('input') as f:
+    _input = f.read()
 
 #part 1
 result = 0
