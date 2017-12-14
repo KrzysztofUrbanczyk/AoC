@@ -55,11 +55,11 @@ for num in range(len(array)):
         i += 1
     dense_hash[i] ^= array[num]
 
-result = ''
+knot_hash = ''
 for ha in dense_hash:
-    result += '{0:02x}'.format(ha)
+    knot_hash += '{0:02x}'.format(ha)
 
-print(result)
+print(knot_hash)
 
 
 
