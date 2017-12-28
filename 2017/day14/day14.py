@@ -1,6 +1,8 @@
 with open('input') as f:
     input_puzzle = f.read()
 
+regions_array = []
+
 result = 0
 for i in range(128):
     array = list(range(256))
@@ -39,9 +41,31 @@ for i in range(128):
         knot_hash += '{0:02x}'.format(ha)
 
     binary = bin(int(knot_hash, 16))[2:].zfill(128)
-    print(binary)
+    regions_array.append(list(binary))
     result += binary.count('1')
 
 print(result)
 
-#TODO part 2
+#part 2
+directions = (1, 0), (-1, 0), (0, -1), (0, 1)
+
+
+def clear_region(x, y):
+    global regions_array
+    regions_array[x][y] = '0'
+    for direction in directions:
+        tmp_x, tmp_y = x + direction[0], y + direction[1]
+        if tmp_x < 0 or tmp_x > 127 or tmp_y < 0 or tmp_y > 127:
+            continue
+        if regions_array[tmp_x][tmp_y] == '1':
+            clear_region(tmp_x, tmp_y)
+
+
+regions = 0
+for i in range(128):
+    for j in range(128):
+        if regions_array[i][j] == '1':
+            regions += 1
+            clear_region(i, j)
+
+print(regions)
