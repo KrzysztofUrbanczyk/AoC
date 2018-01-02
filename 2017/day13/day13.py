@@ -1,6 +1,7 @@
 with open('input') as f:
     _input = f.readlines()
 
+#part 1
 result = 0
 
 for line in _input:
@@ -8,10 +9,29 @@ for line in _input:
     layer = int(items[0])
     layer_range = int(items[1])
 
-    if layer / (layer_range - 1) % 2 == 0:
+    if layer % (layer_range - 1) * 2 == 0 and layer > layer_range:
         result += layer_range * layer
 
-#part 1
 print(result)
 
-#TODO part 2 - bruteforce solution work too long
+
+# part 2
+cnt = 0
+
+while True:
+    hit = False
+    for line in _input:
+        items = line.split(': ')
+        layer = int(items[0])
+        layer_range = int(items[1])
+        if (layer + cnt) % ((layer_range - 1) * 2) == 0:
+            hit = True
+            break
+
+    if not hit:
+        print(cnt)
+        break
+    cnt += 1
+
+
+
