@@ -1,34 +1,29 @@
-import difflib
-from collections import Counter
-from itertools import combinations
+import re
+from string import ascii_lowercase
 
 with open('input') as f:
-    _input = f.read().splitlines()
+    _input = f.read()
 
-two = 0
-three = 0
+
+def cut_polymers(polymer):
+    i = 0
+    while i < len(polymer) - 1:
+        x, y = polymer[i], polymer[i + 1]
+        if x.casefold() == y.casefold():
+            if x != y:
+                polymer = polymer.replace(x + y, "")
+                i = 0
+        i += 1
+    return polymer
+
 
 #part 1
-for line in _input:
-    letterCount = Counter(line).values()
-    if 2 in letterCount:
-        two += 1
-    if 3 in letterCount:
-        three += 1
-
-print(two * three)
+print(len(cut_polymers(_input)))
 
 #part 2
+result = list()
+for c in ascii_lowercase:
+    pattern = re.compile(c, re.IGNORECASE)
+    result.append(len(cut_polymers(pattern.sub("", _input))))
 
-result = ""
-
-for seq1, seq2 in combinations(_input, 2):
-    difference = sum(1 for a, b in zip(seq1, seq2) if a != b)
-    if difference == 1:
-        for i, s in enumerate(difflib.ndiff(seq1, seq2)):
-            if s[0] == ' ':
-                result += s[-1]
-
-        print(result)
-        break
-
+print(min(result))
