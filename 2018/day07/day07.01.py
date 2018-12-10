@@ -33,6 +33,8 @@ for key in forward.keys():
     if key not in backward:
         first_steps.append(key)
 
+first_steps.sort()
+
 for node in nodes:
     if node not in backward:
         backward[node] = ""
@@ -55,6 +57,4 @@ def process_steps(parent, left):
             return process_steps(step, left)
 
 
-first_steps.sort()
 print(process_steps(first_steps[0], first_steps))
-
