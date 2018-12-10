@@ -1,4 +1,4 @@
-import  re
+import re
 from collections import deque
 
 with open('input') as f:
