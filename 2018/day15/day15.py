@@ -46,7 +46,6 @@ class Unit:
                     enemy[0].HP -= 3
                     if enemy[0].HP <= 0:
                         area[enemy[0].X][enemy[0].Y] = clear
-                        units.remove(enemy[0])
                     break
 
     def move(self):
@@ -89,6 +88,8 @@ def update_area():
             if area[i][j] == "E" or area[i][j] == "G":
                 area[i][j] = clear
     for unit in units:
+        if unit.HP <= 0:
+            continue
         area[unit.X][unit.Y] = unit.Race
 
 
@@ -105,10 +106,16 @@ for i in range(len(area)):
             units.append(Unit(area[i][j], i, j))
 
 
-for i in range(0, 100):
+for i in range(1, 100):
     units.sort(key=lambda unit: (unit.X, unit.Y))
+    for unit in units:
+        if unit.HP <= 0:
+            units.remove(unit)
 
     for unit in units:
+        if unit.HP <= 0:
+            continue
+
         if unit.is_enemy_near():
             unit.attack()
         else:
@@ -124,12 +131,12 @@ for i in range(0, 100):
     for line in area:
         print("".join(line))
 
-    goblis = list(filter(lambda x: x.Race == "G" ,units))
-    elfs = list(filter(lambda x: x.Race == "E", units))
+    goblis = list(filter(lambda x: x.Race == "G" and x.HP > 0, units))
+    elfs = list(filter(lambda x: x.Race == "E" and x.HP > 0, units))
 
     if len(goblis) == 0 or len(elfs) == 0:
         result = 0
-        for u in units:
+        for u in filter(lambda x: x.HP > 0, units):
             print(u.HP)
             result += u.HP
         print(result * i)
