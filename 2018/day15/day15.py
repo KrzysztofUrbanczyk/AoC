@@ -35,7 +35,7 @@ class Unit:
         enemy_around = list()
         for x2, y2 in ((x - 1, y), (x, y - 1), (x, y + 1), (x + 1, y)):
             if area[x2][y2] == self.get_opposite_race():
-                for enemy in filter(lambda x: x.X == x2 and x.Y == y2 , units):
+                for enemy in filter(lambda x: x.X == x2 and x.Y == y2  , units):
                     enemy_around.append(enemy)
 
         if len(enemy_around) > 0:
@@ -96,17 +96,13 @@ def update_area():
 units = list()
 area = _input
 
-'''
-for line in area:
-    print("".join(line))
-'''
 for i in range(len(area)):
     for j in range(len(area)):
         if area[i][j] == "E" or area[i][j] == "G":
             units.append(Unit(area[i][j], i, j))
 
 
-for i in range(1, 100):
+for i in range(0, 100):
     units.sort(key=lambda unit: (unit.X, unit.Y))
     for unit in units:
         if unit.HP <= 0:
@@ -124,9 +120,6 @@ for i in range(1, 100):
                 unit.attack()
         update_area()
 
-
-    units.sort(key=lambda unit: (unit.X, unit.Y))
-
     print(i)
     for line in area:
         print("".join(line))
@@ -139,5 +132,5 @@ for i in range(1, 100):
         for u in filter(lambda x: x.HP > 0, units):
             print(u.HP)
             result += u.HP
-        print(result * i)
+        print(i, result, result * i)
         break
